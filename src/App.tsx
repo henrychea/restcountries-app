@@ -1,34 +1,57 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useState } from 'react'
 import './App.css'
+import CountryList from './components/CountryList'
+import useAppContext from './context/UseAppContextHook'
+import { GetAllCountries } from './services/CountryService'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [countries, setCountries] = useState([])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const AppCtx = useAppContext()
+
+  useEffect(() => {
+    setLoading(true)
+    GetAllCountries().then((res) => {
+      setLoading(false)
+      setCountries(res)
+    })
+  }, [])
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className='p-8 h-full min-h-screen dark:bg-gray-950 bg-white w-100'>
+      <div className='row space-y-5'>
+        <h1 className='text-5xl text-center font-bold text-green-500 dark:text-green-300'>
+          Countries Catalog
+        </h1>
+        <h2 className='text-2xl text-center dark:text-green-500 text-green-900'>
+          Search For a Country
+        </h2>
+        <div className='flex justify-center'>
+          <input
+            className='border-2 border-green-500 rounded-md p-2 w-1/2'
+            type='text'
+            placeholder='Search...'
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <div className='transtion'>
+          {loading && (
+            <p className='text-center text-2xl text-green-900'>Loading...</p>
+          )}
+          {!loading && (
+            <div className='flex justify-center min-w-full'>
+              <div className='row align-middle min-w-full'>
+                <div className='col'>
+                  <CountryList countries={countries as []} />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 
