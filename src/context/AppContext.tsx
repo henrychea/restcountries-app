@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useState } from "react";
 import { IAppContext, ICountry } from "../types";
 
 const AppContext = createContext<IAppContext | undefined>(undefined);
