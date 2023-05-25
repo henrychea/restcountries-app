@@ -81,7 +81,7 @@ export default function CountryDeatils(props: { country: ICountryDetail }) {
         {currencies.map((curr, index) => {
           return (
             <span
-              className='inline-flex px-2 py-1 mx-1 dark:bg-slate-400 dark:text-black bg-slate-700 text-white rounded-full'
+              className='inline-flex px-2 py-1 mx-1 dark:bg-slate-400 dark:text-black bg-slate-700 text-white rounded-full my-1'
               key={curr.keyText}
             >{`${curr.keyText}: ${curr.name} (${curr.symbol})${
               index !== currencies.length - 1 ? ', ' : ''
@@ -136,14 +136,14 @@ export default function CountryDeatils(props: { country: ICountryDetail }) {
         <div id='item1' className='carousel-item w-full'>
           <img
             src={flags.png}
-            className='w-full p-1'
+            className='object-contain w-full p-1'
             alt={flags.alt}
           />
         </div>
         <div id='item2' className='carousel-item w-full'>
           <img
             src={coatOfArms.png}
-            className='w-full p-1'
+            className='object-contain w-full p-1'
             alt={`Coat of Arms of ${country.name.common}`}
           />
         </div>
