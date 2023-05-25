@@ -55,7 +55,7 @@ export default function CountryDeatils(props: { country: ICountryDetail }) {
         <input type='checkbox' />
         <div className='collapse-title text-lg'>Translated Names</div>
         <div className='collapse-content'>
-          {translatedNames.map((el, index) => {
+          {translatedNames.map((el) => {
             return (
               <p key={el.keyText}>
                 <span className='font-bold uppercase'>{el.keyText}</span>:{' '}
