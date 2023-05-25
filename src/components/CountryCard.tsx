@@ -3,23 +3,27 @@ import StarIconSvg from '../../public/star.svg'
 import StarFilledIconSvg from '../../public/starFilled.svg'
 import useAppContext from '../context/UseAppContextHook'
 import { useEffect, useState } from 'react'
+import CountryDeatils from './CountryDeatils'
 
-function CountryCard({ country }: { country: ICountry }) {
+function CountryCard(props: { country: any}) {
+  const country = props.country as ICountry
   const { name, cca2, cca3, altSpellings, idd, flag, flags } = country
   const common = name?.common
   const native = name?.nativeName
   const { favorites, setFavorites } = useAppContext()
 
-  function handleFavourite(){
+  function handleFavourite() {
     if (!isFavourite) {
       if (favorites.length === 0) {
-        setFavorites([country])
+        setFavorites([props.country])
       } else {
-        setFavorites([...favorites, country])
+        setFavorites([...favorites, props.country])
       }
       setIsFavourite(true)
     } else {
-      const newFavorites = favorites.filter((favourite) => favourite.cca2 !== country.cca2)
+      const newFavorites = favorites.filter(
+        (favourite) => favourite.cca2 !== props.country.cca2,
+      )
       setFavorites(newFavorites)
     }
   }
@@ -27,9 +31,10 @@ function CountryCard({ country }: { country: ICountry }) {
   const [isFavourite, setIsFavourite] = useState(false)
 
   useEffect(() => {
-    favorites.find((favourite) => favourite.cca2 === country.cca2) ? setIsFavourite(true) : setIsFavourite(false)
+    favorites.find((favourite) => favourite.cca2 === props.country.cca2)
+      ? setIsFavourite(true)
+      : setIsFavourite(false)
   }, [favorites])
-  
 
   const nativeNameKeys = Object.keys(native)
 
@@ -71,8 +76,14 @@ function CountryCard({ country }: { country: ICountry }) {
       </figure>
       <div className='card-body'>
         <div className='card-actions justify-end'>
-          <button onClick={handleFavourite} className='btn bg-transparent outline-none btn-ghost btn-sm'>
-            <img src={isFavourite ? StarFilledIconSvg : StarIconSvg} alt='Favourite Star' />
+          <button
+            onClick={handleFavourite}
+            className='btn bg-transparent outline-none btn-ghost btn-sm'
+          >
+            <img
+              src={isFavourite ? StarFilledIconSvg : StarIconSvg}
+              alt='Favourite Star'
+            />
           </button>
         </div>
         <h2 className='card-title text-3xl'>{`${common} ${flag}`}</h2>
@@ -109,7 +120,24 @@ function CountryCard({ country }: { country: ICountry }) {
         </p>
         <p>IID : {idd?.root?.toString()}</p>
         <div className='card-actions justify-end'>
-          <button className='btn btn-primary'>View Details</button>
+          <input
+            type='checkbox'
+            id={cca2 + '-modal'}
+            className='modal-toggle'
+          />
+          <div className='modal'>
+            <div className='modal-box'>
+              <CountryDeatils country={props.country} />
+              <div className='modal-action'>
+                <label htmlFor={cca2 + '-modal'} className='btn'>
+                  Close
+                </label>
+              </div>
+            </div>
+          </div>
+          <label htmlFor={cca2 + '-modal'} className='btn btn-primary'>
+            View Details
+          </label>
         </div>
       </div>
     </div>
