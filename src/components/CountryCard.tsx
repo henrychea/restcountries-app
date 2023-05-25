@@ -118,7 +118,7 @@ function CountryCard(props: { country: any}) {
             {cca2 ? `${cca2} (${cca3})` : 'No CCA'}
           </span>{' '}
         </p>
-        <p>IID : {idd?.root?.toString()}</p>
+        <p>IID : {idd?.root?.toString() + idd?.suffixes?.toString()}</p>
         <div className='card-actions justify-end'>
           <input
             type='checkbox'
