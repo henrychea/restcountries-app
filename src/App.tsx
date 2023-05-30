@@ -8,7 +8,7 @@ import {
 } from './services/CountryService'
 
 function App() {
-  const [countries, setCountries] = useState(null)
+  const [countries, setCountries] = useState<[] | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [loading, setLoading] = useState(false)
 

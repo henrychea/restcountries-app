@@ -2,14 +2,14 @@ import { ICountry } from '../types'
 import StarIconSvg from '../../public/star.svg'
 import StarFilledIconSvg from '../../public/starFilled.svg'
 import useAppContext from '../context/UseAppContextHook'
-import { useEffect, useState } from 'react'
+import { Key, useEffect, useState } from 'react'
 import CountryDeatils from './CountryDeatils'
 
-function CountryCard(props: { country: any}) {
-  const country = props.country as ICountry
+function CountryCard(props: { country: ICountry}) {
+  const country = props.country
   const { name, cca2, cca3, altSpellings, idd, flag, flags } = country
-  const common = name?.common
-  const native = name?.nativeName
+  const common = name.common
+  const native = name.nativeName
   const { favorites, setFavorites } = useAppContext()
 
   function handleFavourite() {
@@ -36,7 +36,7 @@ function CountryCard(props: { country: any}) {
       : setIsFavourite(false)
   }, [favorites])
 
-  const nativeNameKeys = Object.keys(native)
+  const nativeNameKeys = native ? Object.keys(native) : []
 
   const nativeKeyedValueObjects = nativeNameKeys.map((key) => {
     return {
@@ -62,86 +62,92 @@ function CountryCard(props: { country: any}) {
     )
   }
 
-  return (
-    <div
-      key={cca2 + cca3 + common}
-      className='card card-side bg-base-100 shadow-xl w-full min-w-full'
-    >
-      <figure className='min-w-[250px]'>
-        <img
-          className='pl-2 object-contain w-[250px] h-[150px]'
-          src={flags?.png}
-          alt={flags?.alt}
-        />
-      </figure>
-      <div className='card-body'>
-        <div className='card-actions justify-end'>
-          <button
-            onClick={handleFavourite}
-            className='btn bg-transparent outline-none btn-ghost btn-sm'
-          >
-            <img
-              src={isFavourite ? StarFilledIconSvg : StarIconSvg}
-              alt='Favourite Star'
-            />
-          </button>
-        </div>
-        <h2 className='card-title text-3xl'>{`${common} ${flag}`}</h2>
-        <div>
-          Hover to see other names:{' '}
-          {nativeKeyedValueObjects.map((nativeNameKeyedValue, index) => {
-            return (
-              <span key={index}>
-                <NativeNameSpan {...nativeNameKeyedValue} />
-              </span>
-            )
-          })}
-        </div>
-        <p className='space-y-1'>
-          Alternate spellings:{' '}
-          {altSpellings.map((spelling, index) => {
-            return (
-              <span
-                key={index}
-                className='italic flex-grow-0 inline-flex mx-1 mt-1'
-              >
-                {spelling
-                  .toString()
-                  .concat(index !== altSpellings.length - 1 ? ', ' : '')}
-              </span>
-            )
-          })}
-        </p>
-        <p>
-          Country code :{' '}
-          <span className='font-bold'>
-            {cca2 ? `${cca2} (${cca3})` : 'No CCA'}
-          </span>{' '}
-        </p>
-        <p>IID : {idd?.root?.toString() + idd?.suffixes?.toString()}</p>
-        <div className='card-actions justify-end'>
-          <input
-            type='checkbox'
-            id={cca2 + '-modal'}
-            className='modal-toggle'
+  if (country){
+    return (
+      <div
+        key={cca2 + cca3 + common}
+        className='card card-side bg-base-100 shadow-xl w-full min-w-full'
+      >
+        <figure className='min-w-[250px]'>
+          <img
+            className='pl-2 object-contain w-[250px] h-[150px]'
+            src={flags?.png}
+            alt={flags?.alt}
           />
-          <div className='modal'>
-            <div className='modal-box'>
-              <CountryDeatils country={props.country} />
-              <div className='modal-action'>
-                <label htmlFor={cca2 + '-modal'} className='btn'>
-                  Close
-                </label>
+        </figure>
+        <div className='card-body'>
+          <div className='card-actions justify-end'>
+            <button
+              onClick={handleFavourite}
+              className='btn bg-transparent outline-none btn-ghost btn-sm'
+            >
+              <img
+                src={isFavourite ? StarFilledIconSvg : StarIconSvg}
+                alt='Favourite Star'
+              />
+            </button>
+          </div>
+          <h2 className='card-title text-3xl'>{`${common} ${flag}`}</h2>
+          <div>
+            Hover to see other names:{' '}
+            {nativeKeyedValueObjects.map((nativeNameKeyedValue, index) => {
+              return (
+                <span key={index}>
+                  <NativeNameSpan {...nativeNameKeyedValue} />
+                </span>
+              )
+            })}
+          </div>
+          <p className='space-y-1'>
+            Alternate spellings:{' '}
+            {altSpellings.map((spelling: { toString: () => string | any[] }, index: Key | null | undefined) => {
+              return (
+                <span
+                  key={index}
+                  className='italic flex-grow-0 inline-flex mx-1 mt-1'
+                >
+                  {spelling
+                    .toString()
+                    .concat(index !== altSpellings.length - 1 ? ', ' : '')}
+                </span>
+              )
+            })}
+          </p>
+          <p>
+            Country code :{' '}
+            <span className='font-bold'>
+              {cca2 ? `${cca2} (${cca3})` : 'No CCA'}
+            </span>{' '}
+          </p>
+          <p>IID : {idd?.root?.toString() + idd?.suffixes?.toString()}</p>
+          <div className='card-actions justify-end'>
+            <input
+              type='checkbox'
+              id={cca2 + '-modal'}
+              className='modal-toggle'
+            />
+            <div className='modal'>
+              <div className='modal-box'>
+                <CountryDeatils country={props.country as any} />
+                <div className='modal-action'>
+                  <label htmlFor={cca2 + '-modal'} className='btn'>
+                    Close
+                  </label>
+                </div>
               </div>
             </div>
+            <label htmlFor={cca2 + '-modal'} className='btn btn-primary'>
+              View Details
+            </label>
           </div>
-          <label htmlFor={cca2 + '-modal'} className='btn btn-primary'>
-            View Details
-          </label>
         </div>
       </div>
-    </div>
-  )
+    )
+  }
+
+  return <div></div>
+
+  
 }
 
 export default CountryCard

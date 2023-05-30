@@ -4,7 +4,7 @@ export default function CountryDeatils(props: { country: ICountryDetail }) {
   console.log('Details:', props.country)
   const country = props.country
 
-  const languageKeys = Object.keys(country.languages)
+  const languageKeys = country.languages ? Object.keys(country.languages) : []
 
   const languages = languageKeys.map((key) => {
     return {
@@ -13,7 +13,7 @@ export default function CountryDeatils(props: { country: ICountryDetail }) {
     }
   })
 
-  const translatedNameKeys = Object.keys(country.translations)
+  const translatedNameKeys = country.translations ? Object.keys(country.translations) : []
 
   const translatedNames = translatedNameKeys.map((key) => {
     return {
@@ -32,7 +32,7 @@ export default function CountryDeatils(props: { country: ICountryDetail }) {
     }
   })
 
-  const currencyKeys = Object.keys(country.currencies)
+  const currencyKeys = country.currencies ? Object.keys(country.currencies) : []
 
   const currencies = currencyKeys.map((key) => {
     return {
@@ -41,9 +41,9 @@ export default function CountryDeatils(props: { country: ICountryDetail }) {
       symbol: country.currencies[key].symbol.toString(),
     }
   })
-
-  const flags = country.flags
-  const coatOfArms = country.coatOfArms
+ 
+  const flags = country?.flags
+  const coatOfArms = country?.coatOfArms
 
   return (
     <div className='p-2 space-y-2'>
@@ -69,7 +69,7 @@ export default function CountryDeatils(props: { country: ICountryDetail }) {
       </div>
       <p>
         Capital: {country?.capital} (
-        {country.capitalInfo.latlng.flat().join(' ,')})
+        {country?.capitalInfo?.latlng?.flat().join(' ,')})
       </p>
       <p>
         Region: {country?.region} ({country?.subregion}) within{' '}
@@ -119,7 +119,7 @@ export default function CountryDeatils(props: { country: ICountryDetail }) {
       <p>
         TLD:{' '}
         <span className='font-thin italic'>
-          {country?.tld.flat().join(' ,')}
+          {country?.tld?.flat().join(' ,')}
         </span>
       </p>
       <p>Member of the UN : {country?.unMember ? '✓' : '✕'}</p>
@@ -144,7 +144,7 @@ export default function CountryDeatils(props: { country: ICountryDetail }) {
           <img
             src={coatOfArms.png}
             className='object-contain w-full p-1'
-            alt={`Coat of Arms of ${country.name.common}`}
+            alt={`Coat of Arms of ${country.name?.common}`}
           />
         </div>
       </div>

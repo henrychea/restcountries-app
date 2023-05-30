@@ -70,7 +70,6 @@ export default function CountryList(props: { countries: [] }) {
   }
 
   function handleShowFavorites() {
-
     setShowFavorites(!showFavorites)
   }
 
@@ -120,14 +119,14 @@ export default function CountryList(props: { countries: [] }) {
             </div>
           )
         })}
-      {showFavorites &&
+      {/* {showFavorites &&
         favouriteDisplayCountries.map((country: ICountry) => {
           return (
             <div className='row' key={country.cca2}>
               <CountryCard country={country} />
             </div>
           )
-        })}
+        })} */}
       <div className='flex justify-center'>
         <div className='btn-group'>
           {pageNumberButtons.map((button) => {
